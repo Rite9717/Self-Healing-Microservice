@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: ServiceA
+
+server:
+  port: 9001
+
+service:
+  host: localhost
+
+registry:
+  base-url: http://localhost:8081/registry
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

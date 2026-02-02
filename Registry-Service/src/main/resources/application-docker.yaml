@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/sentinel?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root

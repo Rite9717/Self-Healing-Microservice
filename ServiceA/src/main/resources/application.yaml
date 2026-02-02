@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: ServiceA
+
+server:
+  port: 9001
+
+registry:
+  base-url: ${REGISTRY_URL:http://registry-service:8081/registry}
+
+service:
+  host: ${SERVICE_HOST:sample-service-a}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

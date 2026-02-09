@@ -14,6 +14,9 @@ public class ServiceEntity
 
     @Column(unique= true, nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String platform;
+
     private String version;
 }

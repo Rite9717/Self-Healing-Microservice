@@ -1,0 +1,56 @@
+# Production environment configuration
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate  # Never auto-update in production
+  
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    timeout: 3000ms
+
+management:
+  metrics:
+    tags:
+      environment: production
+
+registry:
+  recovery:
+    ec2:
+      enabled: ${EC2_RECOVERY_ENABLED:true}
+    
+    default:
+      max-restart-attempts: ${MAX_RESTART_ATTEMPTS:3}
+      quarantine-duration-ms: ${QUARANTINE_DURATION_MS:1200000}
+  
+  notification:
+    type: ${NOTIFICATION_TYPE:webhook}
+    webhook:
+      url: ${WEBHOOK_URL}
+  
+  failure-detection:
+    default-heartbeat-threshold-ms: ${HEARTBEAT_THRESHOLD_MS:30000}
+    grace-period-ms: ${GRACE_PERIOD_MS:60000}
+
+aws:
+  region: ${AWS_REGION:us-east-1}
+
+logging:
+  level:
+    com.project.Registry_Service: INFO
+    com.project.Registry_Service.Scheduler.FailureDetector: INFO
+    com.project.Registry_Service.Services.RecoveryService: INFO
+    io.github.resilience4j: WARN

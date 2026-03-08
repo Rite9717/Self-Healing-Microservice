@@ -10,5 +10,8 @@ public class InstanceRegisterRequest
     private int port;
     private String baseUrl;
     private String healthPath;
-    private String containerName;
+    // Platform-specific fields (optional)
+    private String containerName;  // For Docker
+    private String ec2InstanceId;  // For EC2
+    private String ec2Region;      // For EC2
 }

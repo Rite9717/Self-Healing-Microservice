@@ -13,4 +13,6 @@ public interface ServiceInstanceRepository extends JpaRepository<ServiceInstance
     Optional<ServiceInstanceEntity> findByHostAndPort(String host,int port);
 
     List<ServiceInstanceEntity> findByServiceNameAndState(String name, InstanceState state);
+    
+    long countByState(InstanceState state);
 }

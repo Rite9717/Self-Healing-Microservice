@@ -1,0 +1,34 @@
+# Development environment configuration
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sentinel_dev?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  
+  redis:
+    host: localhost
+    port: 6379
+
+management:
+  metrics:
+    tags:
+      environment: dev
+
+registry:
+  recovery:
+    ec2:
+      enabled: false  # Use Docker in dev
+  
+  notification:
+    type: log
+
+logging:
+  level:
+    com.project.Registry_Service: DEBUG
+    com.project.Registry_Service.Scheduler.FailureDetector: TRACE
+    com.project.Registry_Service.Services.RecoveryService: TRACE

@@ -1,0 +1,40 @@
+# Staging environment configuration
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://staging-db:3306/sentinel_staging}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 15
+  
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  
+  redis:
+    host: ${REDIS_HOST:staging-redis}
+    port: ${REDIS_PORT:6379}
+
+management:
+  metrics:
+    tags:
+      environment: staging
+
+registry:
+  recovery:
+    ec2:
+      enabled: ${EC2_RECOVERY_ENABLED:true}
+  
+  notification:
+    type: ${NOTIFICATION_TYPE:webhook}
+    webhook:
+      url: ${WEBHOOK_URL}
+
+aws:
+  region: ${AWS_REGION:us-east-1}
+
+logging:
+  level:
+    com.project.Registry_Service: INFO
+    com.project.Registry_Service.Scheduler.FailureDetector: DEBUG

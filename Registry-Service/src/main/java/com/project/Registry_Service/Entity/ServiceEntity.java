@@ -16,7 +16,19 @@ public class ServiceEntity
     private String name;
 
     @Column(nullable = false)
-    private String platform;
+    private String platform = "docker"; // docker, ec2, kubernetes
 
     private String version;
+
+    // Enhanced failure detection configuration
+    private Long heartbeatThresholdMs;
+
+    // Multi-instance support metadata
+    private String loadBalancingStrategy;
+    
+    private String serviceVersion;
+
+    // Recovery policy configuration
+    @Embedded
+    private RecoveryPolicyConfig recoveryPolicy;
 }

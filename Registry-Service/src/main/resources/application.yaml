@@ -1,14 +1,21 @@
 server:
   port: 8081
+
 spring:
   application:
     name: Registry-Service
+  
+  # Database configuration
   datasource:
     url: jdbc:mysql://localhost:3306/sentinel?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     hikari:
       initialization-fail-timeout: 60000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,16 +23,71 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  
   sql:
     init:
       mode: never
+  
   main:
     lazy-initialization: false
+  
+  # Redis configuration
   redis:
     host: localhost
     port: 6379
+    timeout: 2000ms
+
+# Management and metrics configuration
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: local
+
+# Registry service configuration
+registry:
+  # Recovery configuration
+  recovery:
+    # Enable EC2 recovery strategy
+    ec2:
+      enabled: false
+    
+    # Default recovery policy
+    default:
+      max-restart-attempts: 3
+      quarantine-duration-ms: 1200000  # 20 minutes
+      preferred-recovery-actions: RESTART,START
+  
+  # Notification configuration
+  notification:
+    type: log  # Options: log, webhook, sns
+    webhook:
+      url: ""  # Webhook URL for notifications
+  
+  # Failure detection configuration
+  failure-detection:
+    default-heartbeat-threshold-ms: 30000  # 30 seconds
+    grace-period-ms: 60000  # 60 seconds for new instances
+    suspect-threshold: 2
+    unresponsive-threshold: 4
+    check-interval-ms: 10000  # Run failure detector every 10 seconds
+
+# AWS configuration (when EC2 recovery is enabled)
+aws:
+  region: us-east-1
+  # Credentials will be loaded from:
+  # 1. Environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+  # 2. IAM instance profile (when running on EC2)
+  # 3. AWS credentials file (~/.aws/credentials)
+
+# Logging configuration
+logging:
+  level:
+    com.project.Registry_Service: INFO
+    com.project.Registry_Service.Scheduler.FailureDetector: DEBUG
+    com.project.Registry_Service.Services.RecoveryService: DEBUG
+    io.github.resilience4j: INFO

@@ -2,6 +2,10 @@ package com.project.Registry_Service.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -26,7 +30,12 @@ public class ServiceInstanceEntity
 
     private String healthPath;
 
+    // Docker-specific fields
     private String containerName;
+
+    // EC2-specific fields
+    private String ec2InstanceId;
+    private String ec2Region;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -43,4 +52,12 @@ public class ServiceInstanceEntity
     private Long quarantineUntilTimestamp;
 
     private Long responseTime;
+
+    // Timestamp tracking for grace period and auditing
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 }
